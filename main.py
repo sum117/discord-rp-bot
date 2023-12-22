@@ -4,7 +4,6 @@ from feedback import Feedback
 from player import Player
 from utilities import try_give_feedback
 from commands import handle_add_emoji_command, handle_change_avatar_command
-from database import Database
 load_dotenv()
 
 intents = discord.Intents.default()
@@ -27,17 +26,21 @@ async def on_message(message: discord.Message):
         return
     
     command = message.content[len(PREFIX):].split(' ')
+    try:
+        match command: 
+            case ['change_avatar', *_]:
+                await handle_change_avatar_command(message, client)
+            case ["add_emoji", emoji_name]:
+                await handle_add_emoji_command(message, emoji_name)
+            case ["profile"]:
+                player = Player(message.author.id)
+                await message.reply(embed=await player.get_profile(client))
+            case _:
+                await message.reply(Feedback.INVALID_COMMAND)
+    except discord.HTTPException as exception:
+        print(f"[ERROR] {exception}")
+        await try_give_feedback(message, Feedback.GENERIC_FEEDBACK)
     
-    match command: 
-        case ['change_avatar', *_]:
-            await handle_change_avatar_command(message, client)
-        case ["add_emoji", emoji_name]:
-            await handle_add_emoji_command(message, emoji_name)
-        case ["profile"]:
-            player = Player(message.author.id)
-            await message.reply(embed=await player.get_profile(client))
-        case _:
-            await try_give_feedback(message,Feedback.INVALID_COMMAND)
 
 
 # ---- run the bot ---- #
