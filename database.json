@@ -1,0 +1,42 @@
+{
+  "256979025778442245": {
+    "player_id": "256979025778442245",
+    "level": 10,
+    "xp": 0,
+    "unassigned_points": 0,
+    "current_health": 0,
+    "max_health": 0,
+    "current_mana": 0,
+    "max_mana": 0,
+    "strength": 69,
+    "dexterity": 420,
+    "intelligence": 10000,
+    "luck": 0,
+    "charisma": 0,
+    "wisdom": 0,
+    "constitution": 0,
+    "mining": 0,
+    "fishing": 0,
+    "cooking": 0
+  },
+  "969062359442280548": {
+    "player_id": "969062359442280548",
+    "level": 0,
+    "xp": 0,
+    "unassigned_points": 0,
+    "current_health": 0,
+    "max_health": 0,
+    "current_mana": 0,
+    "max_mana": 0,
+    "strength": 0,
+    "dexterity": 0,
+    "intelligence": 0,
+    "luck": 0,
+    "charisma": 0,
+    "wisdom": 0,
+    "constitution": 0,
+    "mining": 0,
+    "fishing": 0,
+    "cooking": 0
+  }
+}
