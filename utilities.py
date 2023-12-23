@@ -34,8 +34,11 @@ def admin_only(func):
 	return wrapper
 
 
-def create_embed(msg: discord.Message):
+def create_embed_from_message(msg: discord.Message):
     return discord.Embed(description=msg.content)
+
+def create_embed(title: str = '', description: str = '', color = None):
+     return discord.Embed(title=title, description=description, colour=color)
 
 
 async def react(msg: discord.Message):
