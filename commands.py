@@ -1,22 +1,21 @@
 import discord
 from utilities import admin_only, get_image_url_from_message, download_image
-from enums import ChangeAvatarStateEnum
 
 class ChangeAvatarState:
-    state = ChangeAvatarStateEnum.IDLE
+    working = False
 
 @admin_only
 async def handle_change_avatar_command(message: discord.Message, client: discord.Client):
-    if (ChangeAvatarState.state == ChangeAvatarStateEnum.CHANGING):
+    if ChangeAvatarState.working:
         await message.reply('Bot is already changing avatar. Please wait until it is done.')
         return
 
-    ChangeAvatarState.state = ChangeAvatarStateEnum.CHANGING
+    ChangeAvatarState.working = True
     await message.reply('Changing bot avatar...')
     avatar = await download_image(get_image_url_from_message(message))
     await client.user.edit(avatar=avatar)
     await message.reply('Bot avatar changed.')
-    ChangeAvatarState.state = ChangeAvatarStateEnum.IDLE
+    ChangeAvatarState.working = False
 
 
 @admin_only
