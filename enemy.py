@@ -2,7 +2,6 @@
 from player import Player
 from random import randint
 from discord import Message
-from discord.guild import GuildChannel
 from items import ITEM_DATABASE, Item
 from utilities import create_embed
 
@@ -35,14 +34,10 @@ Although these items have a drop chance of 5, they actuall both have a 50% chanc
 """
 
 class Enemy:
-	def __init__(self, name: str, description: str, level: int, max_health: int, attack: int, defense: int, exp: int, drop_table: dict[int, int], icon_url: str, channel: GuildChannel):
+	def __init__(self, name: str, description: str, level: int, max_health: int, attack: int, defense: int, exp: int, drop_table: dict[int, int], icon_url: str, channel):
 		self.adversaries = {} #dict that stores player id keys and the amount of damage they did as the value for awarding exp
-		self.name, self.description, self.level, self.max_health,
-		self.attack, self.defense, self.drop_table, self.icon_url, self.exp =\
-		name, description, level, max_health, 
-		attack, defense, drop_table, icon_url, exp, channel
+		self.name, self.description, self.level, self.max_health, self.attack, self.defense, self.drop_table, self.icon_url, self.exp, self.channel = name, description, level, max_health, attack, defense, drop_table, icon_url, exp, channel
 		self.current_health = self.max_health
-		self.display()
 
 
 	def attack_player(self, player: Player, msg: Message):
@@ -89,13 +84,25 @@ class Enemy:
 		if item.is_stackable(): return 1
 		return randint(1, 5)
 	
-	async def display(self, channel: GuildChannel):
+	async def display(self):
 		embed1 = create_embed()
 		embed2 = create_embed(self.name, self.description)
 		embed1.set_image(url=self.icon_url)
-		await channel.send(embed=embed1)
-		await channel.send(embed=embed2)
+		await self.channel.send(embed=embed1)
+		await self.channel.send(embed=embed2)
 
 class Goblin(Enemy):
 	def __init__(self, channel):
-		attack, defense = randint(1, 5), randint(1, 5)
+		level, max_health, attack, defense = randint(1, 5), randint(1, 5), randint(1, 5), randint(1, 5)
+		super().__init__(
+			name='Goblin', 
+			description='No, you can\'t fuck her...', 
+			level=level, 
+			max_health=max_health, 
+			attack=attack, 
+			defense=defense, 
+			exp=30,
+			drop_table={0: 50, 1:50}, 
+			icon_url='https://cdn.discordapp.com/attachments/1188112675620786246/1188112726367682601/iu.png',
+			channel=channel
+		)

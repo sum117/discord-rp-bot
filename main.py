@@ -2,10 +2,11 @@ import os, discord
 from dotenv import load_dotenv
 from feedback import Feedback
 from player import Player
-from utilities import try_give_feedback
+from utilities import create_embed, try_give_feedback
 from commands import handle_add_emoji_command, handle_change_avatar_command
 from items import ITEM_DATABASE
 from database import Database
+from enemy import Goblin
 load_dotenv()
 
 intents = discord.Intents.default()
@@ -38,15 +39,19 @@ async def on_message(message: discord.Message):
 				await message.reply(embed=await player.get_profile(client))
 			case ['inventory']:
 				player = Player(message.author.id)
-				await message.reply(await player.get_inventory(client))
+				await message.reply(embed=create_embed(title="Test", description=await player.get_inventory(client)))
 			case ['award']: 
 				player = Player(message.author.id)
-				outp = ""
+				output = ""
 				for item in ITEM_DATABASE.values(): 
-					outp += f'Awarding {message.author} with {item.name} x{item.stack_size}\n'
+					output += f'Awarding {message.author} with {item.name} x{item.stack_size}\n'
 					await player.award_item(item, message)
 				Database.save()
-				await message.reply(outp)
+				await message.reply(output)
+			case ['spawn']:
+				channel = await client.fetch_channel(1188124606775697489)
+				goblin = Goblin(channel)
+				await goblin.display()
 			case _:
 				await message.reply(Feedback.INVALID_COMMAND)
 	except discord.HTTPException as exception:
